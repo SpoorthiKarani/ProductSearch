@@ -1,20 +1,27 @@
 import './SearchProduct.css';
 
-const SortBy = () => {
+export const SortBy = ({ sortBy, setSortBy }) => {
     return (
-        <select name="sort">
-            <option value="price-low">Price: Low to High</option>
-            <option value="price-high">Price: High to Low</option>
-            <option value="rating">Rating</option>
-        </select>
+        <div className="sort-by">
+            <select name="sort" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                <option value="rating">Default</option>
+                <option value="priceHighLow">Price: High to Low</option>
+                <option value="priceLowHigh">Price: Low to High</option>
+            </select>
+        </div>
     );
 };
 
-export const SearchProduct = () => {
+export const SearchProduct = ({search, setSearch}) => {
     return (
         <div className="search-product">
-            <input name="search" type="text" placeholder="Search for products..." />
-            <SortBy/>
+            <input 
+                name="search" 
+                type="text" 
+                placeholder="Search for products..." 
+                value={search} 
+                onChange={(e) => setSearch(e.target.value)} 
+            />
         </div>
     );
 };
