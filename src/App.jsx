@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import './App.css';
 
 import { ProductList } from './ProductList.jsx';
@@ -9,23 +9,33 @@ function App() {
   const { products, loading, error } = useProducts();
   const [search, setSearch] = useState('');
   const [sortBy, setSortBy] = useState('default');
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  const matchesSearchProducts = (product) => {
-    return product?.title?.toLowerCase().includes(search?.toLowerCase());
-  };
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [search]);
 
-  const filteredProducts = products?.filter(matchesSearchProducts);
+  const filteredProducts = useMemo(() => {
+    const matchesSearchProducts = (product) => {
+      return product?.title?.toLowerCase().includes(debouncedSearch?.toLowerCase());
+    };
 
-  filteredProducts?.sort((a, b) => {
-    switch (sortBy) {
-      case 'priceLowHigh':
-        return a.price - b.price;
-      case 'priceHighLow':
-        return b.price - a.price;   
-      default:
-        return 0;  
-    }
-  });
+    const filtered = products?.filter(matchesSearchProducts);
+
+    return [...filtered]?.sort((a, b) => {
+      switch (sortBy) {
+        case 'priceLowHigh':
+          return a.price - b.price;
+        case 'priceHighLow':
+          return b.price - a.price;
+        default:
+          return 0;
+      }
+    });
+  }, [products, sortBy, debouncedSearch]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
