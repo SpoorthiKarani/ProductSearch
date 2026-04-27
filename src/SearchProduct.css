@@ -14,3 +14,13 @@
 .sort-by select{
     padding: 10px;
 }
+
+.filter-by {
+    margin-left: 55px;
+    margin-bottom:20px;
+}
+
+.filter-by button {
+    padding: 5px;
+    margin: 5px;
+}

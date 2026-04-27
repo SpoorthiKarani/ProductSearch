@@ -3,13 +3,14 @@ import './App.css';
 
 import { ProductList } from './ProductList.jsx';
 import { useProducts } from './useProducts.jsx';
-import { SearchProduct, SortBy } from './SearchProduct.jsx';
+import { SearchProduct, SortBy, FilterBy } from './SearchProduct.jsx';
 
 function App() {
   const { products, loading, error } = useProducts();
   const [search, setSearch] = useState('');
   const [sortBy, setSortBy] = useState('default');
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [category, setCategory] = useState('all')
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -19,13 +20,19 @@ function App() {
   }, [search]);
 
   const filteredProducts = useMemo(() => {
+    let result = products || [];
     const matchesSearchProducts = (product) => {
       return product?.title?.toLowerCase().includes(debouncedSearch?.toLowerCase());
     };
 
     const filtered = products?.filter(matchesSearchProducts);
 
-    return [...filtered]?.sort((a, b) => {
+    if (category !== "all") {
+    result = filtered.filter(product => product.category === category);
+  }
+
+
+    return [...result]?.sort((a, b) => {
       switch (sortBy) {
         case 'priceLowHigh':
           return a.price - b.price;
@@ -35,7 +42,7 @@ function App() {
           return 0;
       }
     });
-  }, [products, sortBy, debouncedSearch]);
+  }, [products, sortBy, debouncedSearch, category]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -47,6 +54,7 @@ function App() {
         <SearchProduct search={search} setSearch={setSearch} />
         <SortBy sortBy={sortBy} setSortBy={setSortBy} />
       </div>
+      <FilterBy products={filteredProducts} category={category} setCategory={setCategory}/>
       <ProductList products={filteredProducts} />
     </div>
   );
