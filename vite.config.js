@@ -1,11 +1,24 @@
-import { defineConfig } from 'vite'
-import react, { reactCompilerPreset } from '@vitejs/plugin-react'
+import {
+  defineConfig
+} from 'vite'
+import react, {
+  reactCompilerPreset
+} from '@vitejs/plugin-react'
 import babel from '@rolldown/plugin-babel'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
-    babel({ presets: [reactCompilerPreset()] })
+    babel({
+      presets: [reactCompilerPreset()]
+    })
   ],
+  test: {
+    environment: "happy-dom",
+    globals: true,
+    coverage: {
+      reporter: ["text", "json", "html"],
+    },
+  },
 })

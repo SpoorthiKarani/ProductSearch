@@ -1,12 +1,12 @@
 import './ProductCard.css';
 
-export const ProductCard = ({ product }) => {
+export const ProductCard = ({ image, title, price, rating }) => {
     return (
         <div className="product-card">
-            <img src={product.image} alt={product.title} width="100" height="100"/>
-            <h2>{product.title}</h2>
-            <p>Price: ${product.price}</p>
-            <p>Rating: {product.rating.rate} ({product.rating.count} reviews)</p>
+            <img src={image} alt={title} width="100" height="100"/>
+            <h2>{title}</h2>
+            <p>Price: ${price}</p>
+            <p>Rating: {rating.rate} ({rating.count} reviews)</p>
         </div>
     );
 };

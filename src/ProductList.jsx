@@ -7,7 +7,7 @@ export const ProductList = ({ products }) => {
     return (
         <div className="product-list">
             {products?.map(product => (
-                <ProductCard key={product?.id} product={product} />
+                <ProductCard key={product?.id} image={product.image} title={product.title} price={product.price} rating={product.rating} />
             ))}
         </div>
     );
