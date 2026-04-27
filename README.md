@@ -1,7 +1,11 @@
 
 # Product Search Page
 
-Created a Product Search Page where the user can search for a product or sort the products by their price.
+Product Search Page with where the user can search for a product or sort the products by their price.
+
+Created a reusable ProductCard and ProductList components.
+
+Created a custom hook to to handle API fetching logic.
 
 Used debounce to delay the execution of 'matchesSearchProducts' function until the user stops typing for a certain time, reducing unnecessary updates.
 
