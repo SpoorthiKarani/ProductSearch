@@ -1,9 +1,12 @@
 import { useState, useMemo, useEffect } from 'react';
 import './App.css';
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 import { ProductList } from './ProductList.jsx';
 import { useProducts } from './useProducts.jsx';
 import { SearchProduct, SortBy, FilterBy } from './SearchProduct.jsx';
+import { Masthead } from './Masthead.jsx';
 
 function App() {
   const { products, loading, error } = useProducts();
@@ -21,16 +24,14 @@ function App() {
 
   const filteredProducts = useMemo(() => {
     let result = products || [];
-    const matchesSearchProducts = (product) => {
-      return product?.title?.toLowerCase().includes(debouncedSearch?.toLowerCase());
-    };
 
-    const filtered = products?.filter(matchesSearchProducts);
+    if (debouncedSearch) {
+      return result = result.filter((product) => product?.title?.toLowerCase().includes(debouncedSearch?.toLowerCase()));
+    }
 
     if (category !== "all") {
-    result = filtered.filter(product => product.category === category);
-  }
-
+      result = result.filter(product => product.category === category);
+    }
 
     return [...result]?.sort((a, b) => {
       switch (sortBy) {
@@ -49,13 +50,15 @@ function App() {
 
   return (
     <div>
+      <Masthead />
       <h1>Product Search</h1>
       <div className='header'>
         <SearchProduct search={search} setSearch={setSearch} />
         <SortBy sortBy={sortBy} setSortBy={setSortBy} />
       </div>
-      <FilterBy products={filteredProducts} category={category} setCategory={setCategory}/>
+      <FilterBy products={products} category={category} setCategory={setCategory} />
       <ProductList products={filteredProducts} />
+      <ToastContainer position="bottom-right" autoClose={2000} />
     </div>
   );
 }
